@@ -77,4 +77,12 @@ function contribute(uint256 _amount) external onlyBeforeDeadline campaignNotEnde
             }
         }
     }
+function getContributorCount() external view returns (uint256) {
+        return contributors.length;
+    }
+
+    function getCampaignDetails() external view returns (uint256, uint256, uint256, uint256, bool) {
+        return (goalAmount, deadline, totalFunds, block.timestamp, campaignEnded);
+    }
+
 }
