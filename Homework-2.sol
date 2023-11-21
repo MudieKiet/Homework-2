@@ -59,5 +59,22 @@ function contribute(uint256 _amount) external onlyBeforeDeadline campaignNotEnde
 
         emit ContributionReceived(msg.sender, _amount);
     }
-  
+  function endCampaign() external onlyOwner onlyAfterDeadline campaignNotEnded {
+        campaignEnded = true;
+
+        if (totalFunds >= goalAmount) {
+            // Campaign success
+            emit CampaignEnded(true);
+        } else {
+            // Campaign failed
+            emit CampaignEnded(false);
+
+            // Refund contributors
+            for (uint256 i = 0; i < contributors.length; i++) {
+                address contributor = contributors[i];
+                uint256 contributionAmount = contributions[contributor];
+                fundingToken.safeTransfer(contributor, contributionAmount);
+            }
+        }
+    }
 }
