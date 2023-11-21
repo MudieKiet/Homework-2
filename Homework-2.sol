@@ -45,6 +45,19 @@ contract DecentralizedCrowdfunding is Ownable {
         deadline = block.timestamp + (_durationInDays * 1 days);
         campaignEnded = false;
     }
+function contribute(uint256 _amount) external onlyBeforeDeadline campaignNotEnded {
+        require(_amount > 0, "Contribution amount must be greater than 0");
 
+        // Transfer funds from the contributor to the contract
+        fundingToken.safeTransferFrom(msg.sender, address(this), _amount);
+
+        // Update contributor's contribution amount
+        contributions[msg.sender] += _amount;
+
+        // Update total funds raised
+        totalFunds += _amount;
+
+        emit ContributionReceived(msg.sender, _amount);
+    }
   
 }
